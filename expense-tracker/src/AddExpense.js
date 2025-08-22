@@ -22,7 +22,7 @@ export default function AddExpense() {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [fetchCategories]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

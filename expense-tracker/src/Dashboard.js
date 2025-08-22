@@ -85,7 +85,7 @@ export default function Dashboard() {
     fetchCategories();
     fetchExpenses();
     fetchTotalExpenses();
-  }, []);
+  }, [fetchCategories, fetchExpenses, fetchTotalExpenses]);
 
   const categorySummary = expenses.reduce((acc, exp) => {
     const categoryName = exp.categoryId?.name || "ไม่มีหมวดหมู่";

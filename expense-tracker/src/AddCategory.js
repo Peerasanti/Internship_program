@@ -49,7 +49,7 @@ export default function AddCategory() {
 
     useEffect(() => {
         fetchCategories();
-    }, []);
+    }, [fetchCategories]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

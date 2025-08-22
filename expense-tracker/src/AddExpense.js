@@ -6,7 +6,6 @@ export default function AddExpense() {
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
 
@@ -41,7 +40,6 @@ export default function AddExpense() {
       if (response.ok) {
         setCategoryId("");
         setAmount("");
-        setDate("");
         setDescription("");
         navigate("/"); 
       } else {
@@ -62,21 +60,6 @@ export default function AddExpense() {
       <h1>Add Expense</h1>
       <form onSubmit={handleSubmit} className="expense-form">
         <label>
-          Category:
-          <select
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
           Amount:
           <input
             type="number"
@@ -93,6 +76,21 @@ export default function AddExpense() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+        </label>
+        <label>
+          Category:
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </label>
         <button type="submit">Add Expense</button>
       </form>

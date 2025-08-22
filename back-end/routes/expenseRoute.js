@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Expense = require('../models/Expense');
-const Category = require('../models/Category');
+const Expense = require('../model/expense');
+const Category = require('../model/category');
 
 // ค่าใช้จ่ายทั้งหมด และสามารถรองรับการกรอกได้ทั้งหมด
 router.get('/', async (req, res) => {

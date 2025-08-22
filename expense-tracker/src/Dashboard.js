@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import "./Dashboard.css";
 
 export default function Dashboard() {
@@ -62,10 +62,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <nav className="navbar">
-        <Link to="/" className="nav-link">Dashboard</Link>
-        <Link to="/add-expense" className="nav-link">Add Expense</Link>
-      </nav>
+      <Navbar />
 
       <h1>Expense Dashboard</h1>
 
@@ -77,6 +74,14 @@ export default function Dashboard() {
             type="date"
             value={filterStart}
             onChange={(e) => setFilterStart(e.target.value)}
+          />
+        </label>
+        <label>
+          End Date:{" "}
+          <input
+            type="date"
+            value={filterEnd}
+            onChange={(e) => setFilterEnd(e.target.value)}
           />
         </label>
         <label>
@@ -106,14 +111,6 @@ export default function Dashboard() {
             value={maxAmount}
             onChange={(e) => setMaxAmount(e.target.value)}
             min="0"
-          />
-        </label>
-        <label>
-          End Date:{" "}
-          <input
-            type="date"
-            value={filterEnd}
-            onChange={(e) => setFilterEnd(e.target.value)}
           />
         </label>
         <label>

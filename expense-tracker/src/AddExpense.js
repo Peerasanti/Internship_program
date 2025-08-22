@@ -7,6 +7,7 @@ export default function AddExpense() {
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10)); 
 
   const fetchCategories = async () => {
     try {
@@ -25,7 +26,7 @@ export default function AddExpense() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const currentDate = new Date().toISOString();
+      const currentDate = date || new Date().toISOString();
       const response = await fetch("http://localhost:3001/api/expenses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,6 +41,7 @@ export default function AddExpense() {
         setCategoryId("");
         setAmount("");
         setDescription("");
+        setDate(new Date().toISOString().slice(0, 10));
       } else {
         console.error("Error adding expense");
       }
@@ -72,6 +74,14 @@ export default function AddExpense() {
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+            />
+          </label>
+          <label>
+            วันที่:
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
             />
           </label>
           <label>

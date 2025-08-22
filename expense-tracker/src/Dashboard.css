@@ -248,4 +248,46 @@ h2 {
   color: #111;
 }
 
+.error-container {
+  background-color: #fef2f2;
+  border-left: 4px solid #ef4444;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 16px auto;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+}
+
+.sort-button {
+  background-color: #111;
+  color: #fff;                 
+  border: none;          
+  border-radius: 6px;          
+  padding: 4px 8px;          
+  font-size: 0.8rem;           
+  cursor: pointer;             
+  transition: background 0.2s; 
+}
+
+.sort-button:hover {
+  background-color: #444;     
+}
+
+.th-date {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 

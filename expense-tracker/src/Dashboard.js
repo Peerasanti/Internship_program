@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import "./Dashboard.css";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, } from "recharts";
-import {ComposedChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, } from "recharts";
+import {ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, } from "recharts";
 
 
 export default function Dashboard() {
@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [maxAmount, setMaxAmount] = useState("");
   const [error, setError] = useState("");
   const [totalExpenses, setTotalExpenses] = useState(0);
+  const [sortDateOrder, setSortDateOrder] = useState("desc");
 
   const fetchCategories = async () => {
     try {
@@ -39,19 +40,23 @@ export default function Dashboard() {
 
   const fetchExpenses = async (startDate = "", endDate = "", categoryId = "", minAmount = "", maxAmount = "") => {
     try {
-      if (Number(maxAmount) < Number(minAmount)) {
-        setError("Maximum amount must be greater than or equal to minimum.");
+      if (minAmount && maxAmount && Number(maxAmount) < Number(minAmount)) {
+        setError("รายจ่ายสูงสุดจะต้องมีค่ามากกว่าหรือเท่ากับรายจ่ายต่ําสุด");
         return; 
-      } else if (endDate < startDate) {
-        setError("End date must be greater than or equal to start date.");
+      }
+      
+      if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+        setError("วันที่สิ้นสุดจะต้องมากกว่าหรือเท่ากับวันที่เริ่มต้น");
         return; 
       }
 
 
       let url = "http://localhost:3001/api/expenses";
       const params = new URLSearchParams();
-      if (startDate && endDate) {
+      if (startDate) {
         params.append("startDate", startDate);
+      }
+      if (endDate) {
         params.append("endDate", endDate);
       }
       if (categoryId) {
@@ -113,29 +118,39 @@ export default function Dashboard() {
     }, {})
   );
 
-  const calculateSum = (expensesArray, startDate, endDate) => {
+  const calculateSumFromStart = (expensesArray, startDate) => {
     return expensesArray
-      .filter(exp => {
-        const expDate = new Date(exp.date);
-        return expDate >= startDate && expDate <= endDate;
-      })
+      .filter(exp => new Date(exp.date) >= startDate)
       .reduce((sum, exp) => sum + exp.amount, 0);
   };
 
-  const today = new Date();
-  today.setHours(0,0,0,0);
+  const todayStart = new Date(filterStart || new Date());
+  todayStart.setHours(0,0,0,0);
 
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(today.getDate() - 6); 
-  sevenDaysAgo.setHours(0,0,0,0);
+  const sevenDaysAgoStart = new Date();
+  sevenDaysAgoStart.setDate(todayStart.getDate() - 6);
+  sevenDaysAgoStart.setHours(0,0,0,0);
 
-  const oneMonthAgo = new Date();
-  oneMonthAgo.setMonth(today.getMonth() - 1);
-  oneMonthAgo.setHours(0,0,0,0);
+  const oneMonthAgoStart = new Date();
+  oneMonthAgoStart.setMonth(todayStart.getMonth() - 1);
+  oneMonthAgoStart.setHours(0,0,0,0);
 
-  const totalToday = calculateSum(expenses, today, new Date());
-  const total7Days = calculateSum(expenses, sevenDaysAgo, new Date());
-  const total1Month = calculateSum(expenses, oneMonthAgo, new Date());
+  const totalToday = calculateSumFromStart(expenses, todayStart);
+  const total7Days = calculateSumFromStart(expenses, sevenDaysAgoStart);
+  const total1Month = calculateSumFromStart(expenses, oneMonthAgoStart);
+
+  const sortByDate = () => {
+    const newOrder = sortDateOrder === "desc" ? "asc" : "desc";
+    setSortDateOrder(newOrder);
+
+    const sortedExpenses = [...expenses].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return newOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+
+    setExpenses(sortedExpenses);
+  };
 
   return (
     <>
@@ -197,20 +212,24 @@ export default function Dashboard() {
           </label>
         </div>
 
-        <div className="card-container">
-          <div className="card">
-            <h3>วันนี้</h3>
-            <p>{totalToday.toFixed(2)} ฿</p>
-          </div>
-          <div className="card">
-            <h3>7 วันย้อนหลัง</h3>
-            <p>{total7Days.toFixed(2)} ฿</p>
-          </div>
-          <div className="card">
-            <h3>1 เดือนย้อนหลัง</h3>
-            <p>{total1Month.toFixed(2)} ฿</p>
-          </div>
+        <div classNmae="error-container">
+          {error && <p className="error">{error}</p>}
         </div>
+
+        <div className="card-container">
+        <div className="card">
+          <h3>วันนี้</h3>
+          <p>{totalToday.toFixed(2)} ฿</p>
+        </div>
+        <div className="card">
+          <h3>1 สัปดาห์ย้อนหลัง</h3>
+          <p>{total7Days.toFixed(2)} ฿</p>
+        </div>
+        <div className="card">
+          <h3>1 เดือนย้อนหลัง</h3>
+          <p>{total1Month.toFixed(2)} ฿</p>
+        </div>
+      </div>
 
 
         <div className="dashboard-main">
@@ -282,7 +301,14 @@ export default function Dashboard() {
           <table>
             <thead>
               <tr>
-                <th>วันที่</th>
+                <th ClassName="th-date">วันที่
+                   <button 
+                      onClick={sortByDate} 
+                      className="sort-button"
+                    >
+                      {sortDateOrder === "desc" ? "↓ มากไปน้อย" : "↑ น้อยไปมาก"}
+                    </button>
+                </th>
                 <th>หมวดหมู่</th>
                 <th>โน๊ตความจำ</th>
                 <th>รายจ่าย (฿)</th>

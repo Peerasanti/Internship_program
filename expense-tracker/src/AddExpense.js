@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import "./AddExpense.css";
+import Navbar from "./components/Navbar";
 
 export default function AddExpense() {
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const navigate = useNavigate();
 
   const fetchCategories = async () => {
     try {
@@ -41,7 +40,6 @@ export default function AddExpense() {
         setCategoryId("");
         setAmount("");
         setDescription("");
-        navigate("/"); 
       } else {
         console.error("Error adding expense");
       }
@@ -51,49 +49,49 @@ export default function AddExpense() {
   };
 
   return (
-    <div className="add-expense-container">
-      <nav className="navbar">
-        <Link to="/" className="nav-link">Dashboard</Link>
-        <Link to="/add-expense" className="nav-link">Add Expense</Link>
-      </nav>
+    <>
+      <Navbar />
+      <div className="add-expense-container">
+        
 
-      <h1>Add Expense</h1>
-      <form onSubmit={handleSubmit} className="expense-form">
-        <label>
-          Amount:
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            min="0"
-            required
-          />
-        </label>
-        <label>
-          Description:
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </label>
-        <label>
-          Category:
-          <select
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button type="submit">Add Expense</button>
-      </form>
-    </div>
+        <h1>บันทึกรายจ่าย</h1>
+        <form onSubmit={handleSubmit} className="expense-form">
+          <label>
+            รายจ่าย:
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              min="0"
+              required
+            />
+          </label>
+          <label>
+            โน๊ตความจำ:
+            <input
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </label>
+          <label>
+            หมวดหมู่:
+            <select
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+              required
+            >
+              <option value="">เลือกหมวดหมู่</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="submit">บันทึก</button>
+        </form>
+      </div>
+    </>
   );
 }

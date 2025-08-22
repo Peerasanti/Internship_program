@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// ลบข้อมูลของประเภทออก
+// ลบข้อมูลของประเภทค่าใช้จ่ายออกตาม id
 router.delete('/:id', async (req, res) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);
@@ -46,6 +46,19 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Category deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Error deleting category' });
+  }
+});
+
+// แกไขข้อมูลของประเภทค่าใช้จ่ายตาม id
+router.put('/:id', async (req, res) => {
+  try {
+    const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!category) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+    res.json(category);
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating category' });
   }
 });
 

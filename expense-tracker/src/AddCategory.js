@@ -2,9 +2,39 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import "./AddCategory.css";
 
+const EditModal = ({ category, onSave, onClose }) => {
+    const [newName, setNewName] = useState(category.name);
+
+    const handleSave = () => {
+        onSave(category._id, newName);
+        onClose();
+    };
+
+    return (
+        <div className="modal-backdrop">
+            <div className="modal-content">
+                <h3>แก้ไขหมวดหมู่</h3>
+                <label>
+                    หมวดหมู่ใหม่:
+                    <input
+                        type="text"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                    />
+                </label>
+                <div className="modal-actions">
+                    <button onClick={handleSave}>Save</button>
+                    <button onClick={onClose}>Cancel</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export default function AddCategory() {
     const [categoryName, setCategoryName] = useState('');
     const [categories, setCategories] = useState([]);
+    const [editingCategory, setEditingCategory] = useState(null); 
 
     const fetchCategories = async () => {
         try {
@@ -30,7 +60,7 @@ export default function AddCategory() {
             });
             if (response.ok) {
                 setCategoryName('');
-                fetchCategories(); 
+                fetchCategories();
             } else {
                 console.error('Error adding category');
             }
@@ -39,60 +69,93 @@ export default function AddCategory() {
         }
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (categoryId) => {
         try {
-            const response = await fetch(`http://localhost:3001/api/categories/${id}`, {
+            const response = await fetch(`http://localhost:3001/api/categories/${categoryId}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
-                fetchCategories(); 
+                fetchCategories();
             } else {
-                console.error('Error deleting category');
+                const errorData = await response.json();
+                console.error('Error updating category:', errorData.error);
             }
         } catch (error) {
             console.error('Error deleting category:', error);
         }
     };
 
+    const handleEditClick = (category) => {
+        setEditingCategory(category);
+    };
+
+    const handleSaveEdit = async (categoryId, newName) => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/categories/${categoryId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newName }),
+            });
+            if (response.ok) {
+                fetchCategories();
+                setEditingCategory(null); 
+            } else {
+                console.error('Error updating category');
+            }
+        } catch (error) {
+            console.error('Error updating category:', error);
+        }
+    };
+
     return (
-        <div className="add-category-container">
-            <Navbar />
-            <h1>Add Category</h1>
-            <form onSubmit={handleSubmit} className="category-form">
-                <label>
-                    Category Name:
-                    <input
-                        type="text"
-                        name="categoryName"
-                        value={categoryName}
-                        onChange={(e) => setCategoryName(e.target.value)}
-                        required
-                    />
-                </label>
-                <button type="submit">Add Category</button>
-            </form>
+        <>
+            <Navbar/>
+            <div className="add-category-container">
+                
+                <h1>เพิ่มหมวดหมู่</h1>
+                <form onSubmit={handleSubmit} className="category-form">
+                    <label>
+                        ชื่อหมวดหมู่:
+                        <input
+                            type="text"
+                            name="categoryName"
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
+                            required
+                        />
+                    </label>
+                    <button type="submit">เพิ่ม</button>
+                </form>
 
-            ---
-
-            <h2>Category List</h2>
-            <table className="category-table">
-                <thead>
-                    <tr>
-                        <th>Category Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {categories.map((category) => (
-                        <tr key={category._id}>
-                            <td>{category.name}</td>
-                            <td>
-                                <button onClick={() => handleDelete(category._id)}>Delete</button>
-                            </td>
+                <h2>รายการหมวดหมู่ทั้งหมด</h2>
+                <table className="category-table">
+                    <thead>
+                        <tr>
+                            <th>ชื่อหมวดหมู่</th>
+                            <th>จัดการ</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        {categories.map((category) => (
+                            <tr key={category._id}>
+                                <td>{category.name}</td>
+                                <td>
+                                    <button onClick={() => handleEditClick(category)}>Edit</button>
+                                    <button onClick={() => handleDelete(category._id)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                {editingCategory && (
+                    <EditModal
+                        category={editingCategory}
+                        onSave={handleSaveEdit}
+                        onClose={() => setEditingCategory(null)}
+                    />
+                )}
+            </div>
+        </>
     );
 }

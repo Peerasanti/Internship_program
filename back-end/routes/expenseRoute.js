@@ -32,6 +32,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// ค่าใช้จ่ายทั้งหมด
+router.get('/all', async (req, res) => {
+  try {
+    const expenses = await Expense.find().populate('categoryId', 'name');
+    res.json(expenses);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching expenses' });
+  }
+})
+
 // ค่าใช้จ่ายตามวันที่
 router.get('/byDate/:startDate/:endDate', async (req, res) => {
   try {
@@ -68,6 +78,16 @@ router.post('/', async (req, res) => {
     res.status(201).json(populatedExpense);
   } catch (error) {
     res.status(500).json({ error: 'Error saving expense' });
+  }
+});
+
+// ลบรายการจ่ายใช้จ่ายทั้งหมด
+router.delete('/deleteAll', async (req, res) => {
+  try {
+    await Expense.deleteMany({});
+    res.json({ message: 'All expenses deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting expenses' });
   }
 });
 

@@ -14,6 +14,10 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 }).catch(err => console.error('MongoDB connection error:', err));
 
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB connected successfully at', new Date().toISOString());
+});
+
 const expenseRoutes = require('./routes/expenseRoute');
 const categoryRoutes = require('./routes/categoryRoute');
 app.use('/expenses', expenseRoutes);

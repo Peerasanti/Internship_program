@@ -32,7 +32,7 @@ const EditModal = ({ category, onSave, onClose }) => {
 };
 
 export default function AddCategory() {
-    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
+    const apiUrl = "https://expense-intern.netlify.app/.netlify/functions/api";
     const [categoryName, setCategoryName] = useState('');
     const [categories, setCategories] = useState([]);
     const [editingCategory, setEditingCategory] = useState(null); 

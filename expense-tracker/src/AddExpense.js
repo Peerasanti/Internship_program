@@ -3,7 +3,7 @@ import "./AddExpense.css";
 import Navbar from "./components/Navbar";
 
 export default function AddExpense() {
-  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
+  const apiUrl = "https://expense-intern.netlify.app/.netlify/functions/api";
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");

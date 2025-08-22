@@ -6,7 +6,7 @@ import {ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, } from "recharts"
 
 
 export default function Dashboard() {
-  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
+  const apiUrl = "https://expense-intern.netlify.app/.netlify/functions/api";
   const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filterStart, setFilterStart] = useState("");

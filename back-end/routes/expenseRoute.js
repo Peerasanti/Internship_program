@@ -1,12 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const Expense = require('../model/expense');
-const Category = require('../model/category');
+const Expense = require('../models/Expense');
+const Category = require('../models/Category');
 
-// ค่าใช้จ่ายทั้งหมด
+// ค่าใช้จ่ายทั้งหมด และสามารถรองรับการกรอกได้ทั้งหมด
 router.get('/', async (req, res) => {
   try {
-    const expenses = await Expense.find().populate('categoryId', 'name');
+    const { startDate, endDate, categoryId, minAmount, maxAmount } = req.query;
+    const query = {};
+
+    if (startDate && endDate) {
+      query.date = { $gte: startDate, $lte: endDate };
+    }
+    if (categoryId) {
+      if (!categoryId.match(/^[0-9a-fA-F]{24}$/)) {
+        return res.status(400).json({ error: 'Invalid category ID' });
+      }
+      query.categoryId = categoryId;
+    }
+    if (minAmount) {
+      query.amount = { ...query.amount, $gte: parseFloat(minAmount) };
+    }
+    if (maxAmount) {
+      query.amount = { ...query.amount, $lte: parseFloat(maxAmount) };
+    }
+
+    const expenses = await Expense.find(query).populate('categoryId', 'name');
     res.json(expenses);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching expenses' });
@@ -30,7 +49,6 @@ router.get('/byDate/:startDate/:endDate', async (req, res) => {
 router.get('/byCategory/:categoryId', async (req, res) => {
   try {
     const { categoryId } = req.params;
-    // ตรวจสอบว่า categoryId เป็น ObjectId ที่ถูกต้อง
     if (!categoryId.match(/^[0-9a-fA-F]{24}$/)) {
       return res.status(400).json({ error: 'Invalid category ID' });
     }

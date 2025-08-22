@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./AddExpense.css";
 import Navbar from "./components/Navbar";
 
@@ -10,7 +10,7 @@ export default function AddExpense() {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10)); 
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch(`${apiUrl}/categories`);
       const data = await response.json();
@@ -18,7 +18,7 @@ export default function AddExpense() {
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
-  };
+  }, [apiUrl]);
 
   useEffect(() => {
     fetchCategories();

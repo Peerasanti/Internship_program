@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "./components/Navbar";
 import "./Dashboard.css";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, } from "recharts";
@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [sortDateOrder, setSortDateOrder] = useState("desc");
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch(`${apiUrl}/categories`);
       const data = await response.json();
@@ -26,9 +26,9 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
-  };
+  }, [apiUrl]);
 
-  const fetchTotalExpenses = async () => {
+  const fetchTotalExpenses = useCallback(async () => {
     try {
       const response = await fetch(`${apiUrl}/expenses/all`);
       const data = await response.json();
@@ -37,9 +37,9 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error fetching total expenses:", error);
     }
-  };
+  }, [apiUrl]);
 
-  const fetchExpenses = async (startDate = "", endDate = "", categoryId = "", minAmount = "", maxAmount = "") => {
+  const fetchExpenses = useCallback(async (startDate = "", endDate = "", categoryId = "", minAmount = "", maxAmount = "") => {
     try {
       if (minAmount && maxAmount && Number(maxAmount) < Number(minAmount)) {
         setError("รายจ่ายสูงสุดจะต้องมีค่ามากกว่าหรือเท่ากับรายจ่ายต่ําสุด");
@@ -79,7 +79,7 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error fetching expenses:", error);
     }
-  };
+  }, [apiUrl]);
 
   useEffect(() => {
     fetchCategories();
@@ -213,7 +213,7 @@ export default function Dashboard() {
           </label>
         </div>
 
-        <div classNmae="error-container">
+        <div className="error-container">
           {error && <p className="error">{error}</p>}
         </div>
 
@@ -302,7 +302,7 @@ export default function Dashboard() {
           <table>
             <thead>
               <tr>
-                <th ClassName="th-date">วันที่
+                <th className="th-date">วันที่
                    <button 
                       onClick={sortByDate} 
                       className="sort-button"

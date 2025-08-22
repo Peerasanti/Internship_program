@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "./components/Navbar";
 import "./AddCategory.css";
 
@@ -37,7 +37,7 @@ export default function AddCategory() {
     const [categories, setCategories] = useState([]);
     const [editingCategory, setEditingCategory] = useState(null); 
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         try {
             const response = await fetch(`${apiUrl}/categories`);
             const data = await response.json();
@@ -45,7 +45,7 @@ export default function AddCategory() {
         } catch (error) {
             console.error("Error fetching categories:", error);
         }
-    };
+    }, [apiUrl]);
 
     useEffect(() => {
         fetchCategories();
@@ -70,7 +70,7 @@ export default function AddCategory() {
         }
     };
 
-    const handleDelete = async (categoryId) => {
+    const handleDelete = useCallback(async (categoryId) => {
         try {
             const response = await fetch(`${apiUrl}/categories/${categoryId}`, {
                 method: 'DELETE',
@@ -84,13 +84,13 @@ export default function AddCategory() {
         } catch (error) {
             console.error('Error deleting category:', error);
         }
-    };
+    }, [apiUrl, fetchCategories]);
 
     const handleEditClick = (category) => {
         setEditingCategory(category);
     };
 
-    const handleSaveEdit = async (categoryId, newName) => {
+    const handleSaveEdit = useCallback(async (categoryId, newName) => {
         try {
             const response = await fetch(`${apiUrl}/categories/${categoryId}`, {
                 method: 'PUT',
@@ -106,7 +106,7 @@ export default function AddCategory() {
         } catch (error) {
             console.error('Error updating category:', error);
         }
-    };
+    }, [apiUrl, fetchCategories]);
 
     return (
         <>

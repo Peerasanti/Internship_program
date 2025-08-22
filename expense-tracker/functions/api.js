@@ -17,7 +17,7 @@ const Data = mongoose.model('Data', DataSchema);
 
 const expenseRoutes = require('./routes/expenseRoute');
 const categoryRoutes = require('./routes/categoryRoute');
-app.use('/api/expenses', expenseRoutes);
-app.use('/api/categories', categoryRoutes);
+app.use('/expenses', expenseRoutes);
+app.use('/categories', categoryRoutes);
 
 module.exports.handler = serverless(app);

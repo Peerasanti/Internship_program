@@ -6,6 +6,7 @@ import {ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, } from "recharts"
 
 
 export default function Dashboard() {
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
   const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filterStart, setFilterStart] = useState("");
@@ -19,7 +20,7 @@ export default function Dashboard() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/categories");
+      const response = await fetch(`${apiUrl}/categories`);
       const data = await response.json();
       setCategories(data);
     } catch (error) {

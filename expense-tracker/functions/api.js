@@ -15,13 +15,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 const DataSchema = new mongoose.Schema({ message: String });
 const Data = mongoose.model('Data', DataSchema);
 
-app.get('/data', async (req, res) => {
-  try {
-    const data = await Data.find();
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
+const expenseRoutes = require('./routes/expenseRoute');
+const categoryRoutes = require('./routes/categoryRoute');
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/categories', categoryRoutes);
 
 module.exports.handler = serverless(app);

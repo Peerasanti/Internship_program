@@ -2,9 +2,11 @@ const express = require('express');
 const serverless = require('serverless-http');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
+// console.log('process.env.MONGODB_URI', process.env.MONGODB_URI);
 const app = express();
-app.use(cors({ origin: process.env.REACT_APP_FRONTEND_URL || 'http://localhost:3000' }));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, {

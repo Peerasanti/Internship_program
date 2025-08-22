@@ -30,7 +30,7 @@ export default function Dashboard() {
 
   const fetchTotalExpenses = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/expenses/all");
+      const response = await fetch(`${apiUrl}/expenses/all`);
       const data = await response.json();
       const total = data.reduce((acc, exp) => acc + exp.amount, 0);
       setTotalExpenses(total);
@@ -52,7 +52,7 @@ export default function Dashboard() {
       }
 
 
-      let url = "http://localhost:3001/api/expenses";
+      let url = `${apiUrl}/expenses`;
       const params = new URLSearchParams();
       if (startDate) {
         params.append("startDate", startDate);

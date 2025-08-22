@@ -12,7 +12,7 @@ export default function AddExpense() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/categories");
+      const response = await fetch(`${apiUrl}/categories`);
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -28,7 +28,7 @@ export default function AddExpense() {
     e.preventDefault();
     try {
       const currentDate = date || new Date().toISOString();
-      const response = await fetch("http://localhost:3001/api/expenses", {
+      const response = await fetch(`${apiUrl}/expenses`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

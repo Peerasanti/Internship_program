@@ -39,7 +39,7 @@ export default function AddCategory() {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch("http://localhost:3001/api/categories");
+            const response = await fetch(`${apiUrl}/categories`);
             const data = await response.json();
             setCategories(data);
         } catch (error) {
@@ -54,7 +54,7 @@ export default function AddCategory() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/categories', {
+            const response = await fetch(`${apiUrl}/categories`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: categoryName }),
@@ -72,7 +72,7 @@ export default function AddCategory() {
 
     const handleDelete = async (categoryId) => {
         try {
-            const response = await fetch(`http://localhost:3001/api/categories/${categoryId}`, {
+            const response = await fetch(`${apiUrl}/categories/${categoryId}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -92,7 +92,7 @@ export default function AddCategory() {
 
     const handleSaveEdit = async (categoryId, newName) => {
         try {
-            const response = await fetch(`http://localhost:3001/api/categories/${categoryId}`, {
+            const response = await fetch(`${apiUrl}/categories/${categoryId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: newName }),

@@ -1,0 +1,40 @@
+.dashboard-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.filter-container {
+  margin-bottom: 20px;
+}
+
+.filter-container label {
+  margin-right: 15px;
+}
+
+.summary-container {
+  margin-bottom: 20px;
+  background: #f3f3f3;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.summary-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th,
+.table-container td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.table-container th {
+  background-color: #f0f0f0;
+}

@@ -12,12 +12,13 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 }).catch(err => console.error('MongoDB connection error:', err));
 
-const DataSchema = new mongoose.Schema({ message: String });
-const Data = mongoose.model('Data', DataSchema);
-
 const expenseRoutes = require('./routes/expenseRoute');
 const categoryRoutes = require('./routes/categoryRoute');
 app.use('/expenses', expenseRoutes);
 app.use('/categories', categoryRoutes);
+
+app.get('/', (req, res) => {
+  res.json({ message: 'API is working!' });
+});
 
 module.exports.handler = serverless(app);

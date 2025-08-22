@@ -9,10 +9,7 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGODB_URI).catch(err => console.error('MongoDB connection error:', err));
 
 mongoose.connection.on('connected', () => {
   console.log('MongoDB connected successfully at', new Date().toISOString());

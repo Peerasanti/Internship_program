@@ -262,11 +262,10 @@ h2 {
 }
 
 .error {
-  color: #b91c1c;
-  font-size: 14px;
-  font-weight: 500;
-  margin: 0;
-  text-align: center;
+  color: red;         
+  text-align: center;  
+  margin: 20px 0;      
+  font-weight: bold;
 }
 
 .sort-button {

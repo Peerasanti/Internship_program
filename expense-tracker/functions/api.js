@@ -4,12 +4,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-// console.log('process.env.MONGODB_URI', process.env.MONGODB_URI);
+// console.log('process.env.MONGODB_URI', process.env.REACT_APP_MONGODB_URI);
 const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI).catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGODB_URI);
 
 mongoose.connection.on('connected', () => {
   console.log('MongoDB connected successfully at', new Date().toISOString());

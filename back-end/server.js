@@ -18,9 +18,13 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 const expenseRoutes = require('./routes/expenseRoute');
 const categoryRoutes = require('./routes/categoryRoute');
-app.use('/api/expenses', expenseRoutes);
-app.use('/api/categories', categoryRoutes);
+app.use('/expenses', expenseRoutes);
+app.use('/categories', categoryRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+});
+
+app.get('/', (req, res) => {
+  res.json({ message: 'API is working!' });
 });

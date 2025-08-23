@@ -6,7 +6,7 @@ import {ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, } from "recharts"
 
 
 export default function Dashboard() {
-  const apiUrl = "https://expense-intern.netlify.app/.netlify/functions/api";
+  const apiUrl = process.env.REACT_APP_API_URL || process.env.REACT_APP_LOCALHOST;
   const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filterStart, setFilterStart] = useState("");
@@ -213,9 +213,7 @@ export default function Dashboard() {
           </label>
         </div>
 
-        <div className="error-container">
-          {error && <p className="error">{error}</p>}
-        </div>
+        {error && <p className="error">{error}</p>}
 
         <div className="card-container">
         <div className="card">

@@ -42,7 +42,7 @@ export default function Dashboard() {
   const fetchExpenses = useCallback(async (startDate = "", endDate = "", categoryId = "", minAmount = "", maxAmount = "") => {
     try {
       if (minAmount && maxAmount && Number(maxAmount) < Number(minAmount)) {
-        setError("รายจ่ายสูงสุดจะต้องมีค่ามากกว่าหรือเท่ากับรายจ่ายต่ําสุด");
+        setError("รายจ่ายสูงสุดจะต้องมีค่ามากกว่าหรือเท่ากับรายจ่ายต่ำสุด");
         return; 
       }
       
